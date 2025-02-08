@@ -1,0 +1,10 @@
+services:
+  typeOrm-mysql:
+    image: mysql:latest
+    container_name: typeOrm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 963369
+      MYSQL_DATABASE: typeOrm-mysql 
+    ports:
+      - '3306:3306'
+    restart: unless-stopped
