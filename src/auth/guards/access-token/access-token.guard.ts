@@ -1,48 +1,46 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from 'src/auth/config/jwt.config';
+import { Reflector } from '@nestjs/core'; 
 import { Request } from 'express';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
+import { IS_PUBLIC_KEY } from 'src/auth/decorators/public.decorator';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly configService: ConfigService,
+    private readonly reflector: Reflector, // ✅ Add Reflector for @Public() decorator
   ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    //Extract the request from the execution context
-    /*const request = context.switchToHttp().getRequest();
-      const authorization = request.headers.authorization;
-      const token = authorization?.split(' ')[1];*/
+    const isPublic = this.reflector.get<boolean>(
+      IS_PUBLIC_KEY,
+      context.getHandler(),
+    );
+    if (isPublic) {
+      return true; // ✅ Skip auth check for public routes
+    }
 
-    const request = context.switchToHttp().getRequest();
-    //Extract the token from the header
+    const request = context.switchToHttp().getRequest<Request>();
+    const token = this.extractTokenFromHeader(request);
 
-    const token = this.extractRequestFromHeader(request);
-
-    //validate the token
     if (!token) {
       throw new UnauthorizedException();
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        this.jwtConfiguration,
-      );
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('jwt.secret'),
+      });
 
       request[REQUEST_USER_KEY] = payload;
-      //console.log(payload);
     } catch (error) {
       throw new UnauthorizedException();
     }
@@ -50,8 +48,11 @@ export class AccessTokenGuard implements CanActivate {
     return true;
   }
 
-  private extractRequestFromHeader(request: Request): string | undefined {
-    const [_, token] = request.headers.authorization?.split(' ') ?? [];
-    return token;
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const authHeader = request.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return undefined;
+    }
+    return authHeader.split(' ')[1];
   }
 }

@@ -9,6 +9,7 @@ import { GenerateTokensProvider } from './generate-tokens.provider';
 import { HashingProvider } from './hashing.provider';
 import { RefreshTokensProvider } from './refresh-tokens-provider';
 import { ProfessorModule } from 'src/professor/professor.module';
+import { AccessTokenGuard } from './guards/access-token/access-token.guard';
 
 @Module({
   controllers: [AuthController],
@@ -20,12 +21,13 @@ import { ProfessorModule } from 'src/professor/professor.module';
     },
     GenerateTokensProvider,
     RefreshTokensProvider,
+    AccessTokenGuard,
   ],
   imports: [
     forwardRef(() => ProfessorModule),
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
-  exports: [AuthService, HashingProvider],
+  exports: [AuthService, HashingProvider, JwtModule, AccessTokenGuard],
 })
 export class AuthModule {}

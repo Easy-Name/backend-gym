@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Professor } from './professor/entities/professor.entity';
 import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard';
 
 @Module({
   imports: [
@@ -13,20 +15,21 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     ProfessorModule,
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // Inject ConfigModule to use environment variables
-      inject: [ConfigService], // Inject ConfigService to access environment variables
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql', // Database type (e.g., mysql, postgres, etc.)
-        host: configService.get<string>('DB_HOST'), // Database host
-        port: configService.get<number>('DB_PORT'), // Database port
-        username: configService.get<string>('DB_USERNAME'), // Database username
-        password: configService.get<string>('DB_PASSWORD'), // Database password
-        database: configService.get<string>('DB_DATABASE'), // Database name
-        entities: [Professor, User], // Add your entities here
-        synchronize: configService.get<boolean>('DB_SYNC'), // Automatically synchronize database schema
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        entities: [Professor, User],
+        synchronize: configService.get<boolean>('DB_SYNC'),
       }),
     }),
     AuthModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: AccessTokenGuard }],
 })
 export class AppModule {}
