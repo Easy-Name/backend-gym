@@ -5,6 +5,7 @@ import { ProfessorModule } from './professor/professor.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Professor } from './professor/entities/professor.entity';
 import { User } from './user/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { User } from './user/entities/user.entity';
         synchronize: configService.get<boolean>('DB_SYNC'), // Automatically synchronize database schema
       }),
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}

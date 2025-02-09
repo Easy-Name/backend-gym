@@ -3,6 +3,8 @@ import {
   NotFoundException,
   ConflictException,
   InternalServerErrorException,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,12 +12,15 @@ import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import * as bcrypt from 'bcrypt';
 import { Professor } from './entities/professor.entity';
+import { HashingProvider } from 'src/auth/hashing.provider';
 
 @Injectable()
 export class ProfessorService {
   constructor(
     @InjectRepository(Professor)
     private readonly professorRepository: Repository<Professor>,
+    @Inject(forwardRef(() => HashingProvider))
+    private readonly hashingProvider: HashingProvider,
   ) {}
 
   // Create a new professor
@@ -31,8 +36,9 @@ export class ProfessorService {
     }
 
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(createProfessorDto.password, 10);
-    console.log(hashedPassword);
+    const hashedPassword = await this.hashingProvider.hashPassword(
+      createProfessorDto.password,
+    );
 
     // Create a new professor entity
     const professor = this.professorRepository.create({
@@ -64,6 +70,17 @@ export class ProfessorService {
     });
     if (!professor) {
       throw new NotFoundException(`Professor with ID ${id} not found.`);
+    }
+    return professor;
+  }
+
+  // Find a professor by Email
+  async findOneByEmail(email: string): Promise<Professor> {
+    const professor = await this.professorRepository.findOne({
+      where: { email },
+    });
+    if (!professor) {
+      throw new NotFoundException(`Professor with email: ${email} not found.`);
     }
     return professor;
   }
