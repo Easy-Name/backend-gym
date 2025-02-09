@@ -39,6 +39,7 @@ export class ProfessorService {
     const hashedPassword = await this.hashingProvider.hashPassword(
       createProfessorDto.password,
     );
+    //console.log(hashedPassword);
 
     // Create a new professor entity
     const professor = this.professorRepository.create({
@@ -94,9 +95,8 @@ export class ProfessorService {
 
     // Hash the password if it's being updated
     if (updateProfessorDto.password) {
-      updateProfessorDto.password = await bcrypt.hash(
+      updateProfessorDto.password = await this.hashingProvider.hashPassword(
         updateProfessorDto.password,
-        10,
       );
     }
 
@@ -117,6 +117,10 @@ export class ProfessorService {
   // Delete a professor by ID
   async remove(id: number): Promise<void> {
     const professor = await this.findOne(id); // Check if the professor exists
+
+    if (!professor) {
+      throw new NotFoundException('The exercise does not exist.');
+    }
 
     // Delete the professor
     try {

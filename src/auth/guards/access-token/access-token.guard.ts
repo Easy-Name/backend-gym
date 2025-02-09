@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Reflector } from '@nestjs/core'; 
+import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 import { IS_PUBLIC_KEY } from 'src/auth/decorators/public.decorator';
@@ -30,6 +30,7 @@ export class AccessTokenGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
+    //console.log(request);
 
     if (!token) {
       throw new UnauthorizedException();

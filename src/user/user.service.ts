@@ -132,6 +132,10 @@ export class UsersService {
   async remove(id: number): Promise<void> {
     const user = await this.findOne(id); // Check if the user exists
 
+    if (!user) {
+      throw new NotFoundException('The exercise does not exist.');
+    }
+
     // Delete the user
     try {
       await this.userRepository.remove(user);
