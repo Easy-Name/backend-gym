@@ -1,26 +1,84 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTrainingPlanDto } from './dto/create-training-plan.dto';
 import { UpdateTrainingPlanDto } from './dto/update-training-plan.dto';
+import { TrainingPlan } from './entities/training-plan.entity';
 
 @Injectable()
 export class TrainingPlanService {
-  create(createTrainingPlanDto: CreateTrainingPlanDto) {
-    return 'This action adds a new trainingPlan';
+  constructor(
+    @InjectRepository(TrainingPlan)
+    private readonly trainingPlanRepository: Repository<TrainingPlan>,
+  ) {}
+
+  // Create a new training plan
+  async create(
+    createTrainingPlanDto: CreateTrainingPlanDto,
+  ): Promise<TrainingPlan> {
+    const trainingPlan = this.trainingPlanRepository.create(
+      createTrainingPlanDto,
+    );
+    return await this.trainingPlanRepository.save(trainingPlan);
   }
 
-  findAll() {
-    return `This action returns all trainingPlan`;
+  // Retrieve all training plans
+  async findAll(): Promise<TrainingPlan[]> {
+    try {
+      return await this.trainingPlanRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch training plan.');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} trainingPlan`;
+  // Retrieve a single training plan by ID
+  async findOne(id: number): Promise<TrainingPlan> {
+    const trainingPlan = await this.trainingPlanRepository.findOne({
+      where: { id },
+    });
+    if (!trainingPlan) {
+      throw new NotFoundException(`TrainingPlan with ID ${id} not found`);
+    }
+    return trainingPlan;
   }
 
-  update(id: number, updateTrainingPlanDto: UpdateTrainingPlanDto) {
-    return `This action updates a #${id} trainingPlan`;
+  // Update a training plan by ID
+  async update(
+    id: number,
+    updateTrainingPlanDto: UpdateTrainingPlanDto,
+  ): Promise<TrainingPlan> {
+    const trainingPlan = await this.trainingPlanRepository.findOne({
+      where: { id },
+    });
+    if (!trainingPlan) {
+      throw new NotFoundException(`TrainingPlan with ID ${id} not found`);
+    }
+
+    try {
+      this.trainingPlanRepository.merge(trainingPlan, updateTrainingPlanDto); // Merge the changes
+      return await this.trainingPlanRepository.save(trainingPlan); // Save the updated plan
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update training plan.');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} trainingPlan`;
+  // Delete a training plan by ID
+  async remove(id: number): Promise<void> {
+    const trainingPlan = await this.trainingPlanRepository.findOne({
+      where: { id },
+    });
+    if (!trainingPlan) {
+      throw new NotFoundException(`TrainingPlan with ID ${id} not found`);
+    }
+
+    try {
+      await this.trainingPlanRepository.remove(trainingPlan);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to delete training plan.');
+    }
   }
 }

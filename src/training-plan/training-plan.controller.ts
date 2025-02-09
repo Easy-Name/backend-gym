@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { TrainingPlanService } from './training-plan.service';
 import { CreateTrainingPlanDto } from './dto/create-training-plan.dto';
 import { UpdateTrainingPlanDto } from './dto/update-training-plan.dto';
+import { RolesGuard } from 'src/auth/guards/access-token/role.guard';
 
 @Controller('training-plan')
 export class TrainingPlanController {
@@ -13,6 +23,7 @@ export class TrainingPlanController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
   findAll() {
     return this.trainingPlanService.findAll();
   }
@@ -23,7 +34,10 @@ export class TrainingPlanController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrainingPlanDto: UpdateTrainingPlanDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTrainingPlanDto: UpdateTrainingPlanDto,
+  ) {
     return this.trainingPlanService.update(+id, updateTrainingPlanDto);
   }
 

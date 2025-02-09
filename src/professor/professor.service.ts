@@ -93,6 +93,10 @@ export class ProfessorService {
   ): Promise<Professor> {
     const professor = await this.findOne(id); // Check if the professor exists
 
+    if (!professor) {
+      throw new NotFoundException(`Professor with ID: ${id} not found.`);
+    }
+
     // Hash the password if it's being updated
     if (updateProfessorDto.password) {
       updateProfessorDto.password = await this.hashingProvider.hashPassword(
@@ -119,7 +123,7 @@ export class ProfessorService {
     const professor = await this.findOne(id); // Check if the professor exists
 
     if (!professor) {
-      throw new NotFoundException('The exercise does not exist.');
+      throw new NotFoundException('The professor does not exist.');
     }
 
     // Delete the professor
