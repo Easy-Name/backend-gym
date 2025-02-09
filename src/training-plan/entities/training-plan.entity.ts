@@ -4,9 +4,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { TrainingPlanStatus } from './training-plan-status.enum';
+import { PlanComposition } from 'src/plan-composition/entities/plan-composition.entity';
 
 @Entity()
 export class TrainingPlan {
@@ -35,4 +37,10 @@ export class TrainingPlan {
 
   @Column({ nullable: false }) // Foreign key to the User entity
   userId: number;
+
+  @OneToMany(
+    () => PlanComposition,
+    (planComposition) => planComposition.trainingPlan,
+  )
+  planCompositions: PlanComposition[];
 }

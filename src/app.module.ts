@@ -18,6 +18,8 @@ import { Exercise } from './exercise/entities/exercise.entity';
 import { JwtAuthMiddleware } from './auth/middleware/jwtAuthMiddleware';
 import { TrainingPlanModule } from './training-plan/training-plan.module';
 import { TrainingPlan } from './training-plan/entities/training-plan.entity';
+import { PlanCompositionModule } from './plan-composition/plan-composition.module';
+import { PlanComposition } from './plan-composition/entities/plan-composition.entity';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { TrainingPlan } from './training-plan/entities/training-plan.entity';
     ExerciseModule,
     AuthModule,
     TrainingPlanModule,
+    PlanCompositionModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -37,7 +40,7 @@ import { TrainingPlan } from './training-plan/entities/training-plan.entity';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Professor, User, Exercise, TrainingPlan],
+        entities: [Professor, User, Exercise, TrainingPlan, PlanComposition],
         synchronize: configService.get<boolean>('DB_SYNC'),
       }),
     }),

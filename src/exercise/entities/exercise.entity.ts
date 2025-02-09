@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { PlanComposition } from 'src/plan-composition/entities/plan-composition.entity';
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class Exercise {
@@ -13,4 +14,10 @@ export class Exercise {
 
   @Column({ type: 'varchar', length: 96, nullable: true })
   exerciseVideoLink: string;
+
+  @OneToMany(
+    () => PlanComposition,
+    (planComposition) => planComposition.exercise,
+  )
+  planCompositions: PlanComposition[];
 }
