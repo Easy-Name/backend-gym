@@ -37,6 +37,7 @@ export class GenerateTokensProvider {
         this.jwtConfiguration.accessTokenTtl,
         {
           email: professor.email,
+          role: professor.role,
         },
       ),
       //Generate refreshToken

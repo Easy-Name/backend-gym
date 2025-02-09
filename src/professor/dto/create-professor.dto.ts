@@ -6,7 +6,9 @@ import {
   IsPhoneNumber,
   IsEmail,
   MinLength,
+  IsEnum,
 } from 'class-validator';
+import { ProfessorRole } from '../entities/professor-role.enum';
 
 export class CreateProfessorDto {
   @ApiProperty()
@@ -25,6 +27,10 @@ export class CreateProfessorDto {
   @IsPhoneNumber('BR')
   @IsNotEmpty()
   telephone: string;
+
+  @ApiProperty({ enum: ProfessorRole })
+  @IsEnum(ProfessorRole, { message: 'role must be either admin or user' })
+  role: ProfessorRole;
 
   @ApiProperty()
   @IsEmail()

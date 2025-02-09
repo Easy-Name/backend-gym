@@ -1,4 +1,9 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { UsersModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProfessorModule } from './professor/professor.module';
@@ -10,6 +15,9 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard';
 import { ExerciseModule } from './exercise/exercise.module';
 import { Exercise } from './exercise/entities/exercise.entity';
+import { JwtAuthMiddleware } from './auth/middleware/jwtAuthMiddleware';
+import { TrainingPlanModule } from './training-plan/training-plan.module';
+import { TrainingPlan } from './training-plan/entities/training-plan.entity';
 
 @Module({
   imports: [
@@ -18,6 +26,7 @@ import { Exercise } from './exercise/entities/exercise.entity';
     ProfessorModule,
     ExerciseModule,
     AuthModule,
+    TrainingPlanModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,7 +37,7 @@ import { Exercise } from './exercise/entities/exercise.entity';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Professor, User, Exercise],
+        entities: [Professor, User, Exercise, TrainingPlan],
         synchronize: configService.get<boolean>('DB_SYNC'),
       }),
     }),

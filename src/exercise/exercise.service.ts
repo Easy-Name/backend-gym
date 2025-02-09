@@ -88,7 +88,6 @@ export class ExerciseService {
       updateExerciseDto,
     );
 
-    // Save the updated professor
     try {
       return await this.exerciseRepository.save(updatedExercise);
     } catch (error) {

@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ProfessorService } from './professor.service';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { RolesGuard } from 'src/auth/guards/access-token/role.guard';
 
 @Controller('professor')
 export class ProfessorController {
@@ -24,6 +25,7 @@ export class ProfessorController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
   findAll() {
     return this.professorService.findAll();
   }

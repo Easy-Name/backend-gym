@@ -1,5 +1,6 @@
 import { Professor } from 'src/professor/entities/professor.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { TrainingPlan } from 'src/training-plan/entities/training-plan.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -23,4 +24,8 @@ export class User {
 
   @Column({ nullable: true }) // Add a foreign key column to store the professor's ID
   professorId: number;
+
+
+  @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.user) // One-to-many relationship with TrainingPlan
+  trainingPlans: TrainingPlan[]; // Array of training plans associated with the user
 }
