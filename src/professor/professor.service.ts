@@ -5,12 +5,12 @@ import {
   InternalServerErrorException,
   forwardRef,
   Inject,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
-import * as bcrypt from 'bcrypt';
 import { Professor } from './entities/professor.entity';
 import { HashingProvider } from 'src/auth/hashing.provider';
 
@@ -66,6 +66,9 @@ export class ProfessorService {
 
   // Find a professor by ID
   async findOne(id: number): Promise<Professor> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const professor = await this.professorRepository.findOne({
       where: { id },
     });
@@ -77,6 +80,9 @@ export class ProfessorService {
 
   // Find a professor by Email
   async findOneByEmail(email: string): Promise<Professor> {
+    if (!email) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const professor = await this.professorRepository.findOne({
       where: { email },
     });
@@ -91,6 +97,9 @@ export class ProfessorService {
     id: number,
     updateProfessorDto: UpdateProfessorDto,
   ): Promise<Professor> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const professor = await this.findOne(id); // Check if the professor exists
 
     if (!professor) {
@@ -120,6 +129,9 @@ export class ProfessorService {
 
   // Delete a professor by ID
   async remove(id: number): Promise<void> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const professor = await this.findOne(id); // Check if the professor exists
 
     if (!professor) {

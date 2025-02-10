@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -54,6 +55,9 @@ export class ExerciseService {
   }
 
   async findOne(id: number): Promise<Exercise> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const exercise = await this.exerciseRepository.findOne({
       where: { id },
     });
@@ -97,6 +101,10 @@ export class ExerciseService {
 
   async remove(id: number): Promise<void> {
     const exercise = await this.findOne(id); // Check if the exercise exists
+
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
 
     if (!exercise) {
       throw new NotFoundException('The exercise does not exist.');

@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -90,6 +91,9 @@ export class UsersService {
 
   // Find a user by ID
   async findOne(id: number): Promise<User> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const user = await this.userRepository.findOne({
       where: { id },
       relations: ['professor'], // Include the professor relation
@@ -102,6 +106,9 @@ export class UsersService {
 
   // Update a user by ID
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const user = await this.findOne(id); // Check if the user exists
 
     // Check if the associated professor exists (if professorId is being updated)
@@ -130,6 +137,9 @@ export class UsersService {
 
   // Delete a user by ID
   async remove(id: number): Promise<void> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const user = await this.findOne(id); // Check if the user exists
 
     if (!user) {

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -37,6 +38,9 @@ export class TrainingPlanService {
 
   // Retrieve a single training plan by ID
   async findOne(id: number): Promise<TrainingPlan> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const trainingPlan = await this.trainingPlanRepository.findOne({
       where: { id },
     });
@@ -51,6 +55,9 @@ export class TrainingPlanService {
     id: number,
     updateTrainingPlanDto: UpdateTrainingPlanDto,
   ): Promise<TrainingPlan> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const trainingPlan = await this.trainingPlanRepository.findOne({
       where: { id },
     });
@@ -68,6 +75,9 @@ export class TrainingPlanService {
 
   // Delete a training plan by ID
   async remove(id: number): Promise<void> {
+    if (!id || id <= 0) {
+      throw new BadRequestException('Invalid ID provided');
+    }
     const trainingPlan = await this.trainingPlanRepository.findOne({
       where: { id },
     });
