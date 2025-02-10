@@ -29,6 +29,7 @@ export class Professor {
     enum: ProfessorRole,
     default: ProfessorRole.USER, // Default role is "user"
   })
+  @Exclude()
   role: ProfessorRole;
 
   @OneToMany(() => User, (user) => user.professor) // Define the one-to-many relationship
