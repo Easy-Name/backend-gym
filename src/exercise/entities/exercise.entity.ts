@@ -13,7 +13,7 @@ export class Exercise {
   targetBodyPart: string;
 
   @Column({ type: 'varchar', length: 96, nullable: true })
-  exerciseVideoLink: string;
+  exerciseVideoLink?: string;
 
   @OneToMany(
     () => PlanComposition,

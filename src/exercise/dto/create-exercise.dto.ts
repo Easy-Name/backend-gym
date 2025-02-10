@@ -23,6 +23,5 @@ export class CreateExerciseDto {
   @ApiProperty()
   @IsUrl()
   @IsOptional()
-  @IsNotEmpty()
-  exerciseVideoLink: string;
+  exerciseVideoLink?: string;
 }

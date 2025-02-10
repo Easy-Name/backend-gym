@@ -10,12 +10,15 @@ import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Exercise } from './entities/exercise.entity';
 import { Repository } from 'typeorm';
+import { ExercisesCreateManyProvider } from './exercise-create-many.provider';
+import { CreateManyExercisesDto } from './dto/create-many-exercises.dto';
 
 @Injectable()
 export class ExerciseService {
   constructor(
     @InjectRepository(Exercise)
     private readonly exerciseRepository: Repository<Exercise>,
+    private readonly exerciseCreateManyProvider: ExercisesCreateManyProvider,
   ) {}
 
   async create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
@@ -44,6 +47,14 @@ export class ExerciseService {
     } catch (error) {
       throw new InternalServerErrorException('Failed to create professor.');
     }
+  }
+
+  async createMany(
+    createManyExercisesDto: CreateManyExercisesDto,
+  ): Promise<Exercise[]> {
+    return await this.exerciseCreateManyProvider.createMany(
+      createManyExercisesDto,
+    );
   }
 
   async findAll(): Promise<Exercise[]> {
