@@ -7,47 +7,45 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Professor } from 'src/professor/entities/professor.entity';
 import { User } from './entities/user.entity';
-import { UsersOwnProvider } from './user-own.provider';
 import { CreateOwnUserDto } from './dto/create-own-user.dto';
+import { UpdateOwnUserDto } from './dto/update-own-user.dto';
 
 @Injectable()
-export class UsersService {
+export class UsersOwnProvider {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Professor)
     private readonly professorRepository: Repository<Professor>,
-    private readonly usersOwnProvider: UsersOwnProvider,
   ) {}
 
   // Create a new user
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(
+    createOwnUserDto: CreateOwnUserDto,
+    profId: number,
+  ): Promise<User> {
     // Check if the professor exists
     const professor = await this.professorRepository.findOne({
-      where: { id: createUserDto.professorId },
+      where: { id: profId },
     });
     if (!professor) {
-      throw new NotFoundException(
-        `Professor with ID ${createUserDto.professorId} not found.`,
-      );
+      throw new NotFoundException(`Professor with ID ${profId} not found.`);
     }
 
     // Check if a user with the same email or telephone already exists for this professor
     const existingUserWithEmail = await this.userRepository.findOne({
       where: {
-        email: createUserDto.email,
-        professor: { id: createUserDto.professorId },
+        email: createOwnUserDto.email,
+        professor: { id: profId },
       },
     });
 
     const existingUserWithTelephone = await this.userRepository.findOne({
       where: {
-        telephone: createUserDto.telephone,
-        professor: { id: createUserDto.professorId },
+        telephone: createOwnUserDto.telephone,
+        professor: { id: profId },
       },
     });
 
@@ -71,7 +69,8 @@ export class UsersService {
 
     // Create a new user entity
     const user = this.userRepository.create({
-      ...createUserDto,
+      ...createOwnUserDto,
+      professorId: profId,
       professor, // Associate the user with the professor
     });
 
@@ -82,9 +81,9 @@ export class UsersService {
       throw new InternalServerErrorException('Failed to create user.');
     }
   }
-
+/*
   // Find all users
-  async findAll(): Promise<User[]> {
+  async findAll(id: number): Promise<User[]> {
     try {
       return await this.userRepository.find({ relations: ['professor'] }); // Include the professor relation
     } catch (error) {
@@ -93,7 +92,7 @@ export class UsersService {
   }
 
   // Find a user by ID
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number, profId: number): Promise<User> {
     if (!id || id <= 0) {
       throw new BadRequestException('Invalid ID provided');
     }
@@ -108,11 +107,15 @@ export class UsersService {
   }
 
   // Update a user by ID
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(
+    id: number,
+    updateOwnUserDto: UpdateOwnUserDto,
+    profId: number,
+  ): Promise<User> {
     if (!id || id <= 0) {
       throw new BadRequestException('Invalid ID provided');
     }
-    const user = await this.findOne(id); // Check if the user exists
+    const user = await this.findOne(id, profId); // Check if the user exists
 
     // Check if the associated professor exists (if professorId is being updated)
     if (updateUserDto.professorId) {
@@ -139,7 +142,7 @@ export class UsersService {
   }
 
   // Delete a user by ID
-  async remove(id: number): Promise<void> {
+  async remove(id: number, profId: number): Promise<void> {
     if (!id || id <= 0) {
       throw new BadRequestException('Invalid ID provided');
     }
@@ -155,12 +158,5 @@ export class UsersService {
     } catch (error) {
       throw new InternalServerErrorException('Failed to delete user.');
     }
-  }
-
-  async createOwn(
-    createOwnUserDto: CreateOwnUserDto,
-    profId: number,
-  ): Promise<User> {
-    return await this.usersOwnProvider.create(createOwnUserDto, profId);
-  }
+  }*/
 }

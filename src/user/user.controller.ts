@@ -10,6 +10,8 @@ import {
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateOwnUserDto } from './dto/create-own-user.dto';
+import { Professor } from 'src/auth/decorators/professor.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -18,6 +20,14 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('me')
+  createOwn(
+    @Body() createOwnUserDto: CreateOwnUserDto,
+    @Professor() sub: number,
+  ) {
+    return this.usersService.createOwn(createOwnUserDto, sub);
   }
 
   @Get()
