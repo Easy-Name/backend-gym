@@ -6,18 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateOwnUserDto } from './dto/create-own-user.dto';
 import { Professor } from 'src/auth/decorators/professor.decorator';
+import { RolesGuard } from 'src/auth/guards/access-token/role.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -31,6 +34,7 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
   findAll() {
     return this.usersService.findAll();
   }
@@ -41,6 +45,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
@@ -51,6 +56,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
@@ -65,6 +71,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
