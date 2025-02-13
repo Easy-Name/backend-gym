@@ -35,9 +35,19 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('me')
+  findAllOwn(@Professor() sub: number) {
+    return this.usersService.findAllOwn(sub);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
+  }
+
+  @Get('me/:id')
+  findOneOwn(@Param('id') id: string, @Professor() sub: number) {
+    return this.usersService.findOneOwn(+id, sub);
   }
 
   @Patch(':id')
@@ -45,8 +55,22 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @Patch('me/:id')
+  updateOwn(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Professor() sub: number,
+  ) {
+    return this.usersService.updateOwn(+id, updateUserDto, sub);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Delete('me/:id')
+  removeOwn(@Param('id') id: string, @Professor() sub: number) {
+    return this.usersService.removeOwn(+id, sub);
   }
 }

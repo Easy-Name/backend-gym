@@ -13,6 +13,7 @@ import { Professor } from 'src/professor/entities/professor.entity';
 import { User } from './entities/user.entity';
 import { UsersOwnProvider } from './user-own.provider';
 import { CreateOwnUserDto } from './dto/create-own-user.dto';
+import { UpdateOwnUserDto } from './dto/update-own-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -146,7 +147,7 @@ export class UsersService {
     const user = await this.findOne(id); // Check if the user exists
 
     if (!user) {
-      throw new NotFoundException('The exercise does not exist.');
+      throw new NotFoundException('The user does not exist.');
     }
 
     // Delete the user
@@ -162,5 +163,26 @@ export class UsersService {
     profId: number,
   ): Promise<User> {
     return await this.usersOwnProvider.create(createOwnUserDto, profId);
+  }
+
+  // Find all users
+  async findAllOwn(id: number): Promise<User[]> {
+    return await this.usersOwnProvider.findAll(id);
+  }
+
+  async findOneOwn(id: number, profId: number): Promise<User> {
+    return await this.usersOwnProvider.findOne(id, profId);
+  }
+
+  async updateOwn(
+    id: number,
+    updateOwnUserDto: UpdateOwnUserDto,
+    profId: number,
+  ): Promise<User> {
+    return await this.usersOwnProvider.update(id, updateOwnUserDto, profId);
+  }
+
+  async removeOwn(id: number, profId: number): Promise<void> {
+    return await this.usersOwnProvider.remove(id, profId);
   }
 }

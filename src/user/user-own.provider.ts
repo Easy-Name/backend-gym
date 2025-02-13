@@ -81,11 +81,14 @@ export class UsersOwnProvider {
       throw new InternalServerErrorException('Failed to create user.');
     }
   }
-/*
+
   // Find all users
-  async findAll(id: number): Promise<User[]> {
+  async findAll(profId: number): Promise<User[]> {
     try {
-      return await this.userRepository.find({ relations: ['professor'] }); // Include the professor relation
+      return await this.userRepository.find({
+        relations: ['professor'],
+        where: { professorId: profId },
+      }); // Include the professor relation
     } catch (error) {
       throw new InternalServerErrorException('Failed to fetch users.');
     }
@@ -97,7 +100,7 @@ export class UsersOwnProvider {
       throw new BadRequestException('Invalid ID provided');
     }
     const user = await this.userRepository.findOne({
-      where: { id },
+      where: { id, professorId: profId },
       relations: ['professor'], // Include the professor relation
     });
     if (!user) {
@@ -118,20 +121,18 @@ export class UsersOwnProvider {
     const user = await this.findOne(id, profId); // Check if the user exists
 
     // Check if the associated professor exists (if professorId is being updated)
-    if (updateUserDto.professorId) {
+    if (profId) {
       const professor = await this.professorRepository.findOne({
-        where: { id: updateUserDto.professorId },
+        where: { id: profId },
       });
       if (!professor) {
-        throw new NotFoundException(
-          `Professor with ID ${updateUserDto.professorId} not found.`,
-        );
+        throw new NotFoundException(`Professor with ID ${profId} not found.`);
       }
       user.professor = professor; // Associate the user with the new professor
     }
 
     // Merge the updated data into the existing user entity
-    const updatedUser = this.userRepository.merge(user, updateUserDto);
+    const updatedUser = this.userRepository.merge(user, updateOwnUserDto);
 
     // Save the updated user
     try {
@@ -146,10 +147,10 @@ export class UsersOwnProvider {
     if (!id || id <= 0) {
       throw new BadRequestException('Invalid ID provided');
     }
-    const user = await this.findOne(id); // Check if the user exists
+    const user = await this.findOne(id, profId); // Check if the user exists
 
     if (!user) {
-      throw new NotFoundException('The exercise does not exist.');
+      throw new NotFoundException('The user does not exist.');
     }
 
     // Delete the user
@@ -158,5 +159,5 @@ export class UsersOwnProvider {
     } catch (error) {
       throw new InternalServerErrorException('Failed to delete user.');
     }
-  }*/
+  }
 }
