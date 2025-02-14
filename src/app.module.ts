@@ -15,7 +15,6 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token/access-token.guard';
 import { ExerciseModule } from './exercise/exercise.module';
 import { Exercise } from './exercise/entities/exercise.entity';
-import { JwtAuthMiddleware } from './auth/middleware/jwtAuthMiddleware';
 import { TrainingPlanModule } from './training-plan/training-plan.module';
 import { TrainingPlan } from './training-plan/entities/training-plan.entity';
 import { PlanCompositionModule } from './plan-composition/plan-composition.module';

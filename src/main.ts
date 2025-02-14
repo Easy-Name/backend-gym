@@ -10,7 +10,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setVersion('1.0')
     .setTitle('CRUD API for users and professors')
-    .addServer('http://localhost:3000/')
+    .addServer('http://localhost:3005/')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
