@@ -23,7 +23,7 @@ export class TrainingPlanController {
   }
 
   @Get()
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   findAll() {
     return this.trainingPlanService.findAll();
   }

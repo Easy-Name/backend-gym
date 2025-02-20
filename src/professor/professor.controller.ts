@@ -27,13 +27,13 @@ export class ProfessorController {
   }
 
   @Get()
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   findAll() {
     return this.professorService.findAll();
   }
 
   @Get('/adm/:id')
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   findOneAdmin(@Param('id') id: string) {
     return this.professorService.findOne(+id);
   }
@@ -45,7 +45,7 @@ export class ProfessorController {
   }
 
   @Patch('adm/:id')
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   updateAdmin(
     @Param('id') id: string,
     @Body() updateProfessorDto: UpdateProfessorDto,
@@ -63,7 +63,7 @@ export class ProfessorController {
   }
 
   @Delete('admin/:id')
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   removeAdmin(@Param('id') id: string) {
     return this.professorService.remove(+id);
   }
@@ -73,23 +73,4 @@ export class ProfessorController {
     const id = sub;
     return this.professorService.remove(+id);
   }
-  /*
-  @Get('me')
-  findMyself(@Request() req) {
-    const professorId = req.user.id; // Extract professor ID from JWT
-    return this.professorService.findOne(professorId);
-  }
-
-  @Patch('me')
-  updateMyself(@Request() req, @Body() updateProfessorDto: UpdateProfessorDto) {
-    const professorId = req.user.id; // Extract professor ID from JWT
-    return this.professorService.update(professorId, updateProfessorDto);
-  }
-
-  @Delete('me')
-  removeMyself(@Request() req) {
-    //const professorId = req.user.id; // Extract professor ID from JWT
-    console.log('vvvvvvvvvvvvvvvvvvvvvvvv');
-    return this.professorService.remove(7);
-  }*/
 }

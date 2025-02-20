@@ -9,12 +9,15 @@ import { Repository } from 'typeorm';
 import { PlanComposition } from './entities/plan-composition.entity';
 import { CreatePlanCompositionDto } from './dto/create-plan-composition.dto';
 import { UpdatePlanCompositionDto } from './dto/update-plan-composition.dto';
+import { PlanCompositionCreateManyProvider } from './plan-composition-create-many.provider';
+import { CreateManyPlanCompositionDto } from './dto/create-many-plan-composition.dto';
 
 @Injectable()
 export class PlanCompositionService {
   constructor(
     @InjectRepository(PlanComposition)
     private readonly planCompositionRepository: Repository<PlanComposition>,
+    private readonly planCompositionCreateManyProvider: PlanCompositionCreateManyProvider,
   ) {}
 
   async create(
@@ -94,5 +97,11 @@ export class PlanCompositionService {
         `Error deleting PlanComposition with ID ${id}`,
       );
     }
+  }
+
+  async createMany(createManyPlanCompositionDto: CreateManyPlanCompositionDto) {
+    await this.planCompositionCreateManyProvider.createMany(
+      createManyPlanCompositionDto,
+    );
   }
 }

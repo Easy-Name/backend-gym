@@ -20,7 +20,7 @@ export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService) {}
 
   @Post()
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   create(@Body() createExerciseDto: CreateExerciseDto) {
     return this.exerciseService.create(createExerciseDto);
   }
@@ -45,7 +45,7 @@ export class ExerciseController {
   }
 
   @Patch(':id')
-  @UseGuards(RolesGuard)
+  //@UseGuards(RolesGuard)
   update(
     @Param('id') id: string,
     @Body() updateExerciseDto: UpdateExerciseDto,
