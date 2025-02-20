@@ -24,7 +24,7 @@ export class TrainingPlan {
   @Column({
     type: 'enum',
     enum: TrainingPlanStatus,
-    default: TrainingPlanStatus.INACTIVE,
+    default: TrainingPlanStatus.ACTIVE,
   })
   status: TrainingPlanStatus;
 

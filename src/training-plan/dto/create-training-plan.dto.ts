@@ -13,10 +13,11 @@ export class CreateTrainingPlanDto {
   @IsNotEmpty() // Ensures the field is not empty
   endDate: Date;
 
+  /*
   @ApiProperty()
   @IsEnum(TrainingPlanStatus) // Ensures the value is one of the enum values
   @IsNotEmpty() // Ensures the field is not empty
-  status: TrainingPlanStatus;
+  status: TrainingPlanStatus;*/
 
   @ApiProperty()
   @IsInt() // Ensures the value is an integer
