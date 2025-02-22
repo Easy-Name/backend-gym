@@ -15,6 +15,9 @@ export class Exercise {
   @Column({ type: 'varchar', length: 96, nullable: true })
   exerciseVideoLink?: string;
 
+  @Column({ type: 'boolean', nullable: false, default: false })
+  officialExercise: boolean;
+
   @OneToMany(
     () => PlanComposition,
     (planComposition) => planComposition.exercise,

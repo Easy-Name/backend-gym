@@ -5,6 +5,7 @@ import {
   Length,
   IsUrl,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateExerciseDto {
@@ -24,4 +25,9 @@ export class CreateExerciseDto {
   @IsUrl()
   @IsOptional()
   exerciseVideoLink?: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  officialExercise?: boolean;
 }
