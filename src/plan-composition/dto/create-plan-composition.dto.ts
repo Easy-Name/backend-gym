@@ -54,6 +54,6 @@ export class CreatePlanCompositionDto {
 
   @ApiProperty()
   @IsEnum(PlanCompositionStatus) // Ensures the value is one of the enum values
-  @IsNotEmpty() // Ensures the field is not empty
-  status: PlanCompositionStatus;
+  @IsOptional()
+  status?: PlanCompositionStatus;
 }
