@@ -37,7 +37,7 @@ export class PlanCompositionController {
     return this.planCompositionService.findAll();
   }
 
-  @Get('user/:id') // Define the route with `id` as a path parameter
+  @Get('user/:userId') // Define the route with `id` as a path parameter
   async findAllByUser(
     @Param('id') id: string, // Extract `id` from the path
     @Query('status') status: string = 'ACTIVE', // Extract `status` from the query string, default to 'ACTIVE'
