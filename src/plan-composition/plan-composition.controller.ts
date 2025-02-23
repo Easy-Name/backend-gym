@@ -48,7 +48,7 @@ export class PlanCompositionController {
   })
   async findAllByUser(
     @Param('id') id: string, // Extract `id` from the path
-    @Query('status') status: string = 'ACTIVE', // Extract `status` from the query string, default to 'ACTIVE'
+    @Query('status') status: string = 'active', // Extract `status` from the query string, default to 'ACTIVE'
   ) {
     return this.planCompositionService.findAllByUser(+id, status); // Call the service method
   }
