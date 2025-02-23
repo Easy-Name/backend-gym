@@ -29,7 +29,9 @@ export class PlanCompositionService {
       );
       return await this.planCompositionRepository.save(newPlanComposition);
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException(
+        'Error creating PlanComposition record',
+      );
     }
   }
 
@@ -45,7 +47,7 @@ export class PlanCompositionService {
 
   async findAllByUser(
     id: number,
-    status: string = 'ACTIVE',
+    status: string = 'active',
   ): Promise<PlanComposition[]> {
     try {
       // Assuming you want to filter by both id and status
