@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PlanCompositionService } from './plan-composition.service';
 import { CreatePlanCompositionDto } from './dto/create-plan-composition.dto';
 import { UpdatePlanCompositionDto } from './dto/update-plan-composition.dto';
 import { CreateManyPlanCompositionDto } from './dto/create-many-plan-composition.dto';
+import { Professor } from 'src/auth/decorators/professor.decorator';
 
 @Controller('plan-composition')
 export class PlanCompositionController {
@@ -33,6 +35,14 @@ export class PlanCompositionController {
   @Get()
   findAll() {
     return this.planCompositionService.findAll();
+  }
+
+  @Get('user/:id') // Define the route with `id` as a path parameter
+  async findAllByUser(
+    @Param('id') id: string, // Extract `id` from the path
+    @Query('status') status: string = 'ACTIVE', // Extract `status` from the query string, default to 'ACTIVE'
+  ) {
+    return this.planCompositionService.findAllByUser(+id, status); // Call the service method
   }
 
   @Get(':id')

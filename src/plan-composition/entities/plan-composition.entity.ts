@@ -46,7 +46,7 @@ export class PlanComposition {
     enum: PlanCompositionStatus,
     default: PlanCompositionStatus.ACTIVE,
   })
-  status: PlanCompositionStatus;
+  status: string;
 
   /*// Many-to-one relationship with TrainingPlan
   @ManyToOne(

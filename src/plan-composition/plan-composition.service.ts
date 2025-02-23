@@ -43,20 +43,24 @@ export class PlanCompositionService {
     }
   }
 
-
-  async findAllByUser(): Promise<PlanComposition[]> {
+  async findAllByUser(
+    id: number,
+    status: string = 'ACTIVE',
+  ): Promise<PlanComposition[]> {
     try {
-      return await this.planCompositionRepository.find();
+      // Assuming you want to filter by both id and status
+      return await this.planCompositionRepository.find({
+        where: {
+          userId: id, // Assuming the field in the database is `userId`
+          status: status,
+        },
+      });
     } catch (error) {
       throw new InternalServerErrorException(
         'Error retrieving PlanComposition records',
       );
     }
   }
-
-
-
-
 
   async findOne(id: number): Promise<PlanComposition> {
     if (!id || id <= 0) {
