@@ -5,7 +5,11 @@ import {
   IsOptional,
   IsString,
   Length,
+  IsDateString,
+  IsNotEmpty,
+  IsEnum,
 } from 'class-validator';
+import { PlanCompositionStatus } from '../entities/plan-composition-status.enum';
 
 export class CreatePlanCompositionDto {
   @ApiProperty()
@@ -37,4 +41,24 @@ export class CreatePlanCompositionDto {
   @IsString()
   @Length(1, 1) // Ensures it's a single character (e.g., 'A', 'B', 'C')
   day: string;
+
+  @ApiProperty()
+  @IsInt()
+  @IsPositive()
+  userId: number;
+
+  @ApiProperty()
+  @IsDateString() // Ensures the value is a valid date string (e.g., '2023-10-01')
+  @IsOptional()
+  startDate?: Date;
+
+  @ApiProperty()
+  @IsDateString() // Ensures the value is a valid date string
+  @IsOptional()
+  endDate?: Date;
+
+  @ApiProperty()
+  @IsEnum(PlanCompositionStatus) // Ensures the value is one of the enum values
+  @IsNotEmpty() // Ensures the field is not empty
+  status: PlanCompositionStatus;
 }

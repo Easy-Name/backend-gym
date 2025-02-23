@@ -8,9 +8,11 @@ import {
 } from 'typeorm';
 import { TrainingPlan } from '../../training-plan/entities/training-plan.entity';
 import { Exercise } from '../../exercise/entities/exercise.entity';
+import { User } from 'src/user/entities/user.entity';
+import { PlanCompositionStatus } from './plan-composition-status.enum';
 
 @Entity()
-@Unique(['trainingPlanId', 'exerciseId', 'day']) // Composite unique constraint
+@Unique(['userId', 'exerciseId', 'day']) // Composite unique constraint
 export class PlanComposition {
   @PrimaryGeneratedColumn()
   id: number;
@@ -33,13 +35,31 @@ export class PlanComposition {
   @Column({ type: 'varchar', length: 1, nullable: false }) // Day (A, B, C, etc.)
   day: string;
 
-  // Many-to-one relationship with TrainingPlan
+  @Column({ type: 'date', nullable: true }) // Start date of the training plan
+  startDate: Date;
+
+  @Column({ type: 'date', nullable: true }) // End date of the training plan
+  endDate: Date;
+
+  @Column({
+    type: 'enum',
+    enum: PlanCompositionStatus,
+    default: PlanCompositionStatus.ACTIVE,
+  })
+  status: PlanCompositionStatus;
+
+  /*// Many-to-one relationship with TrainingPlan
   @ManyToOne(
     () => TrainingPlan,
     (trainingPlan) => trainingPlan.planCompositions,
   )
   @JoinColumn({ name: 'trainingPlanId' })
-  trainingPlan: TrainingPlan;
+  trainingPlan: TrainingPlan;*/
+
+  // Many-to-one relationship with TrainingPlan
+  @ManyToOne(() => User, (userId) => userId.planComposition)
+  @JoinColumn({ name: 'userId' })
+  userId: number;
 
   // Many-to-one relationship with Exercise
   @ManyToOne(() => Exercise, (exercise) => exercise.planCompositions)

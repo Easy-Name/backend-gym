@@ -43,6 +43,21 @@ export class PlanCompositionService {
     }
   }
 
+
+  async findAllByUser(): Promise<PlanComposition[]> {
+    try {
+      return await this.planCompositionRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error retrieving PlanComposition records',
+      );
+    }
+  }
+
+
+
+
+
   async findOne(id: number): Promise<PlanComposition> {
     if (!id || id <= 0) {
       throw new BadRequestException('Invalid ID provided');

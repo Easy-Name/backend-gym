@@ -1,6 +1,13 @@
+import { PlanComposition } from 'src/plan-composition/entities/plan-composition.entity';
 import { Professor } from 'src/professor/entities/professor.entity';
 import { TrainingPlan } from 'src/training-plan/entities/training-plan.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -25,7 +32,9 @@ export class User {
   @Column({ nullable: true }) // Add a foreign key column to store the professor's ID
   professorId: number;
 
+  /*@OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.user) // One-to-many relationship with TrainingPlan
+  trainingPlans: TrainingPlan[]; // Array of training plans associated with the user*/
 
-  @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.user) // One-to-many relationship with TrainingPlan
-  trainingPlans: TrainingPlan[]; // Array of training plans associated with the user
+  @OneToMany(() => PlanComposition, (planComposition) => planComposition.userId) // One-to-many relationship with PlanComposition
+  planComposition: PlanComposition[]; // Array of training plans associated with the user
 }

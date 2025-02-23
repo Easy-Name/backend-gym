@@ -31,16 +31,17 @@ export class TrainingPlan {
   @Column({ type: 'smallint', nullable: false }) // Days of the training plan
   days: number;
 
-  @ManyToOne(() => User, (user) => user.trainingPlans) // Many-to-one relationship with User
+  /*@ManyToOne(() => User, (user) => user.trainingPlans) // Many-to-one relationship with User
   @JoinColumn({ name: 'userId' }) // Foreign key column
-  user: User;
+  user: User;*/
 
   @Column({ nullable: false }) // Foreign key to the User entity
   userId: number;
 
+  /*
   @OneToMany(
     () => PlanComposition,
     (planComposition) => planComposition.trainingPlan,
   )
-  planCompositions: PlanComposition[];
+  planCompositions: PlanComposition[];*/
 }
