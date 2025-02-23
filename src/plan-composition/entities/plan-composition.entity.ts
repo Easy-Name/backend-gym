@@ -17,11 +17,14 @@ export class PlanComposition {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int', nullable: false }) // Foreign key to TrainingPlan
-  trainingPlanId: number;
+  /*@Column({ type: 'int', nullable: false }) // Foreign key to TrainingPlan
+  trainingPlanId: number;*/
 
   @Column({ type: 'int', nullable: false }) // Foreign key to Exercise
   exerciseId: number;
+
+  @Column({ type: 'int', nullable: false }) // Foreign key to User
+  userId: number;
 
   @Column({ type: 'smallint', nullable: false }) // Number of sets
   numberOfSets: number;
@@ -48,18 +51,10 @@ export class PlanComposition {
   })
   status: string;
 
-  /*// Many-to-one relationship with TrainingPlan
-  @ManyToOne(
-    () => TrainingPlan,
-    (trainingPlan) => trainingPlan.planCompositions,
-  )
-  @JoinColumn({ name: 'trainingPlanId' })
-  trainingPlan: TrainingPlan;*/
-
-  // Many-to-one relationship with TrainingPlan
-  @ManyToOne(() => User, (userId) => userId.planComposition)
+  // Many-to-one relationship with User
+  @ManyToOne(() => User, (user) => user.planComposition)
   @JoinColumn({ name: 'userId' })
-  userId: number;
+  user: User;
 
   // Many-to-one relationship with Exercise
   @ManyToOne(() => Exercise, (exercise) => exercise.planCompositions)

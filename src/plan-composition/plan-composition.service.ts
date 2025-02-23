@@ -29,7 +29,7 @@ export class PlanCompositionService {
       );
       return await this.planCompositionRepository.save(newPlanComposition);
     } catch (error) {
-      throw new InternalServerErrorException('Error creating PlanComposition');
+      throw new InternalServerErrorException(error);
     }
   }
 

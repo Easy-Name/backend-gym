@@ -15,11 +15,6 @@ export class CreatePlanCompositionDto {
   @ApiProperty()
   @IsInt()
   @IsPositive()
-  trainingPlanId: number;
-
-  @ApiProperty()
-  @IsInt()
-  @IsPositive()
   exerciseId: number;
 
   @ApiProperty()

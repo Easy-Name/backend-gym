@@ -32,9 +32,6 @@ export class User {
   @Column({ nullable: true }) // Add a foreign key column to store the professor's ID
   professorId: number;
 
-  /*@OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.user) // One-to-many relationship with TrainingPlan
-  trainingPlans: TrainingPlan[]; // Array of training plans associated with the user*/
-
-  @OneToMany(() => PlanComposition, (planComposition) => planComposition.userId) // One-to-many relationship with PlanComposition
+  @OneToMany(() => PlanComposition, (planComposition) => planComposition.user) // One-to-many relationship with PlanComposition
   planComposition: PlanComposition[]; // Array of training plans associated with the user
 }
