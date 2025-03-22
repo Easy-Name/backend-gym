@@ -20,7 +20,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  //@UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -34,7 +34,7 @@ export class UsersController {
   }
 
   @Get()
-  //@UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   findAll() {
     return this.usersService.findAll();
   }
@@ -45,7 +45,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  //@UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
@@ -56,7 +56,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  //@UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
@@ -71,7 +71,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  //@UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
