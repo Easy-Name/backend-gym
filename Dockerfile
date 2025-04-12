@@ -6,10 +6,10 @@ ENV NODE_ENV=production
 
 COPY package*.json ./
 
-RUN npm ci --omit=dev
+RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+#EXPOSE 3000
 
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:dev" ]
