@@ -19,10 +19,9 @@ async function bootstrap() {
 
   // Explicitly configure CORS to allow your frontend domain
   app.enableCors({
-    origin: 'https://aigym-21b4cc4188db.herokuapp.com/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
-    credentials: true,
   });
 
   await app.listen(process.env.PORT ?? 3000);
