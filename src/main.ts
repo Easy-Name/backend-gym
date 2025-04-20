@@ -10,21 +10,30 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://aigym-21b4cc4188db.herokuapp.com',
-      'http://localhost:3000' // for local development
+      'http://localhost:3000', // for local development
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true,
     preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 204,
   });
 
   // Explicit OPTIONS handler
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Origin', 'https://aigym-21b4cc4188db.herokuapp.com');
-      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
+      res.header(
+        'Access-Control-Allow-Origin',
+        'https://aigym-21b4cc4188db.herokuapp.com',
+      );
+      res.header(
+        'Access-Control-Allow-Methods',
+        'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      );
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Accept, Authorization',
+      );
       res.header('Access-Control-Allow-Credentials', 'true');
       return res.status(204).send();
     }
@@ -42,7 +51,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
