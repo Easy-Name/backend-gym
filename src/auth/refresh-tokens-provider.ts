@@ -32,7 +32,7 @@ export class RefreshTokensProvider {
         Pick<ActiveUserData, 'sub'>
       >(refreshTokenDto.refreshToken, {
         secret: this.jwtConfiguration.secret,
-        audience: this.jwtConfiguration.audience,
+        //audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,
       });
       //fetch professor from database

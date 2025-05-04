@@ -21,7 +21,7 @@ export class GenerateTokensProvider {
         ...payload,
       },
       {
-        audience: this.jwtConfiguration.audience,
+        //audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,
         secret: this.jwtConfiguration.secret,
         expiresIn: this.jwtConfiguration.refreshTokenTtl,
